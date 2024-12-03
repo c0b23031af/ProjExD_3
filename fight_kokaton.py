@@ -141,15 +141,43 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 
+class Score:
+    """
+    スコアに関するクラス
+    """
+    def __init__(self):
+        """
+        フォントの設定
+        文字色の設定：青
+        スコアの初期値の設定:0
+        文字列Surfaceの生成
+        文字列の中心座標
+        """
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.score = 0
+        self.img = self.fonto.render(f"スコア：{self.score}", 0, (0,0,255))
+        self.rct = self.img.get_rect()
+        self.rct.center = [100,HEIGHT-50]
+
+    def update(self,num:int,screen:pg.Surface):
+        """
+        現在のスコアを表示させる文字列Surfaceの生成
+        スクリーンにblit
+        """
+        self.img = self.fonto.render(f"スコア：{num}", num, (0,0,255))
+        screen.blit(self.img, self.rct)
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     bomb = Bomb((255, 0, 0), 10)
+    num = 0
     beam = None  # Beam(bird)  # ビームインスタンス生成
     # bomb2 = Bomb((0, 0, 255), 20) 
-    bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]  
+    bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
+    score = Score()  
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -160,6 +188,7 @@ def main():
                 # スペースキー押下でBeamクラスのインスタンス生成
                 beam = Beam(bird)            
         screen.blit(bg_img, [0, 0])
+        score.update(num,screen)
         
         for bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
@@ -178,7 +207,9 @@ def main():
                     beam = None
                     bombs[i] = None
                     bird.change_img(6, screen)
+                    num += 1
                     pg.display.update()
+                    
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
