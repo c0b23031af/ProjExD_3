@@ -159,12 +159,12 @@ class Score:
         self.rct = self.img.get_rect()
         self.rct.center = [100,HEIGHT-50]
 
-    def update(self,num:int,screen:pg.Surface):
+    def update(self, num:int, screen:pg.Surface):
         """
         現在のスコアを表示させる文字列Surfaceの生成
         スクリーンにblit
-        引数 num:爆弾を撃ち落とした数
-        引数 screen:画面Surface
+        引数 num：爆弾を撃ち落とした数
+        引数 screen：画面Surface
         """
         self.img = self.fonto.render(f"スコア：{num}", num, (0,0,255))
         screen.blit(self.img, self.rct)
